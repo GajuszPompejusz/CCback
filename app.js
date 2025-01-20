@@ -414,17 +414,16 @@ app.post('/login', async (req, res) => {
 
 
     req.session.userId = user.id;
-    // req.session.save((err) => {
-    //   if (err) {
-    //     console.error('Session save error:', err);
-    //     return res.status(500).json({ error: 'Session save failed' });
-    //   } else {
-    //     return res.status(200).json({ userId: user.id });
-    //   }
-    // });
-    console.log('Correct user ID:', req.session);
-
-    return res.status(200).json({ userId: user.id });
+    console.log('Correct session ID:', req.session);
+    req.session.save(async(err) => {
+      if (err) {
+        console.error('Session save error:', err);
+        return res.status(500).json({ error: 'Session save failed' });
+      } 
+      console.log('Correct session ID2:', req.session);
+      return res.status(200).json({ userId: user.id });
+      
+    });
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ error: 'Server error' });
